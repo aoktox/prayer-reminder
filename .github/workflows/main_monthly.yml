@@ -1,0 +1,55 @@
+name: Monthly update schedule and generate workflows
+
+on:
+  schedule:
+    # https://stackoverflow.com/a/16603902
+    - cron: 30 17 30 4,6,9,11 *
+    - cron: 30 17 31 1,3,5,7,8,10,12 *
+    - cron: 30 17 28,29 2 *
+  workflow_dispatch:
+
+env:
+  CITY_NAME: "jakartaselatan"
+  TIMEZONE: "Asia/Jakarta"
+  TIMEZONE_OFFSET: "+0700"
+
+jobs:
+  populate-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          persist-credentials: true
+      - name: Fetch datasource
+        run: |-
+          YEAR=$(TZ=${TIMEZONE} date +%Y)
+          MONTH=$(TZ=${TIMEZONE} date +%m)
+          curl https://raw.githubusercontent.com/lakuapik/jadwalsholatorg/master/adzan/${CITY_NAME}/${YEAR}/${MONTH}.json -o .github/workflows-template/schedule.json
+      - name: Generate workflows
+        run: |-
+          for reminder_name in imsyak shubuh dzuhur ashr magrib isya; do
+              export SCHEDULE_NAME_PLACEHOLDER=$(echo ${reminder_name} | awk '{print toupper($0)}')
+              envsubst '$SCHEDULE_NAME_PLACEHOLDER' < .github/workflows-template/reminder.yml > .github/workflows/reminder_${reminder_name}.yml
+          done
+          for entry in $(jq -rc '.[]' .github/workflows-template/schedule.json); do
+              date=$(echo $entry | jq -rc '.tanggal')
+              for reminder_name in imsyak shubuh dzuhur ashr magrib isya; do
+                  time=$(echo $entry | jq -rc ".${reminder_name}")
+                  cron_minutes=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_M|xargs)
+                  cron_hour=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_H|xargs)
+                  cron_date=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_d|xargs)
+                  cron_month=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_m|xargs)
+                  export cron_expression="${cron_minutes} ${cron_hour} ${cron_date} ${cron_month} *"
+                  yq '.on.schedule += {"cron": env(cron_expression)}' .github/workflows/reminder_${reminder_name}.yml -i
+              done
+          done
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .github/workflows
+          git commit -m "[gh-actions] update workflows and schedule"
+      - uses: ad-m/github-push-action@master
+        with:
+          ssh: true
+          branch: ${{ github.ref }}

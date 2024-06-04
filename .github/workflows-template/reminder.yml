@@ -1,0 +1,15 @@
+name: $SCHEDULE_NAME_PLACEHOLDER reminder
+
+on:
+  schedule: []
+
+env:
+  SCHEDULE_NAME: $SCHEDULE_NAME_PLACEHOLDER
+
+jobs:
+  reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send reminder to slack
+        run: echo "Sending $SCHEDULE_NAME reminder to slack"
