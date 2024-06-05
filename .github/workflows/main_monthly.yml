@@ -37,10 +37,10 @@ jobs:
               date=$(echo $entry | jq -rc '.tanggal')
               for reminder_name in imsyak shubuh dzuhur ashr magrib isya; do
                   time=$(echo $entry | jq -rc ".${reminder_name}")
-                  cron_minutes=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_M|xargs)
-                  cron_hour=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_H|xargs)
-                  cron_date=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_d|xargs)
-                  cron_month=$(date -d "${date} ${time} +0700 - 5 minutes" -u +%_m|xargs)
+                  cron_minutes=$(date -d "${date} ${time} +0700 - 10 minutes" -u +%_M|xargs)
+                  cron_hour=$(date -d "${date} ${time} +0700 - 10 minutes" -u +%_H|xargs)
+                  cron_date=$(date -d "${date} ${time} +0700 - 10 minutes" -u +%_d|xargs)
+                  cron_month=$(date -d "${date} ${time} +0700 - 10 minutes" -u +%_m|xargs)
                   export cron_expression="${cron_minutes} ${cron_hour} ${cron_date} ${cron_month} *"
                   yq '.on.schedule += {"cron": env(cron_expression)}' .github/workflows/reminder_${reminder_name}.yml -i
               done

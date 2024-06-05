@@ -3,9 +3,6 @@ name: $SCHEDULE_NAME_PLACEHOLDER reminder
 on:
   schedule: []
 
-env:
-  SCHEDULE_NAME: $SCHEDULE_NAME_PLACEHOLDER
-
 jobs:
   reminder:
     runs-on: ubuntu-latest
@@ -22,7 +19,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "@here Bentar lagi sholat ${SCHEDULE_NAME} loh! :mosque:"
+                    "text": "@here Bentar lagi sholat $SCHEDULE_NAME_PLACEHOLDER loh! :mosque:"
                   }
                 }
               ]
