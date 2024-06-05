@@ -1,38 +1,36 @@
 name: ASHR reminder
 on:
   schedule:
-    - cron: 10 8 1 6 *
-    - cron: 10 8 2 6 *
-    - cron: 10 8 3 6 *
-    - cron: 10 8 4 6 *
-    - cron: 10 8 5 6 *
-    - cron: 10 8 6 6 *
-    - cron: 11 8 7 6 *
-    - cron: 11 8 8 6 *
-    - cron: 11 8 9 6 *
-    - cron: 11 8 10 6 *
-    - cron: 11 8 11 6 *
-    - cron: 12 8 12 6 *
-    - cron: 12 8 13 6 *
-    - cron: 12 8 14 6 *
-    - cron: 12 8 15 6 *
-    - cron: 12 8 16 6 *
-    - cron: 13 8 17 6 *
-    - cron: 13 8 18 6 *
-    - cron: 13 8 19 6 *
-    - cron: 13 8 20 6 *
-    - cron: 13 8 21 6 *
-    - cron: 14 8 22 6 *
-    - cron: 14 8 23 6 *
-    - cron: 14 8 24 6 *
-    - cron: 14 8 25 6 *
-    - cron: 15 8 26 6 *
-    - cron: 15 8 27 6 *
-    - cron: 15 8 28 6 *
-    - cron: 15 8 29 6 *
-    - cron: 15 8 30 6 *
-env:
-  SCHEDULE_NAME: ASHR
+    - cron: 5 8 1 6 *
+    - cron: 5 8 2 6 *
+    - cron: 5 8 3 6 *
+    - cron: 5 8 4 6 *
+    - cron: 5 8 5 6 *
+    - cron: 5 8 6 6 *
+    - cron: 6 8 7 6 *
+    - cron: 6 8 8 6 *
+    - cron: 6 8 9 6 *
+    - cron: 6 8 10 6 *
+    - cron: 6 8 11 6 *
+    - cron: 7 8 12 6 *
+    - cron: 7 8 13 6 *
+    - cron: 7 8 14 6 *
+    - cron: 7 8 15 6 *
+    - cron: 7 8 16 6 *
+    - cron: 8 8 17 6 *
+    - cron: 8 8 18 6 *
+    - cron: 8 8 19 6 *
+    - cron: 8 8 20 6 *
+    - cron: 8 8 21 6 *
+    - cron: 9 8 22 6 *
+    - cron: 9 8 23 6 *
+    - cron: 9 8 24 6 *
+    - cron: 9 8 25 6 *
+    - cron: 10 8 26 6 *
+    - cron: 10 8 27 6 *
+    - cron: 10 8 28 6 *
+    - cron: 10 8 29 6 *
+    - cron: 10 8 30 6 *
 jobs:
   reminder:
     runs-on: ubuntu-latest
@@ -49,7 +47,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "@here Bentar lagi sholat ${SCHEDULE_NAME} loh! :mosque:"
+                    "text": "@here Bentar lagi sholat ASHR loh! :mosque:"
                   }
                 }
               ]
