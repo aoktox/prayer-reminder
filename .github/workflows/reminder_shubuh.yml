@@ -39,4 +39,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Send reminder to slack
-        run: echo "Sending $SCHEDULE_NAME reminder to slack"
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "@here Bentar lagi sholat ${SCHEDULE_NAME} loh! :mosque:"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
